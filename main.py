@@ -1,4 +1,5 @@
 from replit import db
+from keep_alive import keep_alive
 import discord
 import requests
 import json
@@ -18,7 +19,7 @@ def add_currency(message):
   #print(message.author.id)
   if(str(message.author.name) in db.keys()):
     value = db[str(message.author.name)]
-    print("lel" + db[message.author.name])
+    print(db[message.author.name])
     db[str(message.author.name)] = str(int(value) + 10)
     print(12345)
   else:
@@ -51,4 +52,5 @@ async def on_message(message):
   if(msg.startswith('.currency') and msg.endswith('inventory')):
     await message.channel.send(get_currency(message))
 
+keep_alive()
 client.run(os.getenv('TOKEN'))
