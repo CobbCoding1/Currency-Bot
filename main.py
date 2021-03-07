@@ -16,7 +16,6 @@ def get_meme():
 def add_currency(message):
   print(str(message.author.name))
 
-  #print(message.author.id)
   if(str(message.author.name) in db.keys()):
     value = db[str(message.author.name)]
     print(db[message.author.name])
