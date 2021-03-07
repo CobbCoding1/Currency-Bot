@@ -6,14 +6,14 @@ import json
 import random
 import os
 
-#test
+#I need to add comments in this file.
 
 client = discord.Client()
 
 def get_meme():
-  response = requests.get('https://api.imgflip.com/get_memes')
+  response = requests.get('https://meme-api.herokuapp.com/gimme/wholesomememes')
   json_data = json.loads(response.text)
-  return(json_data['data']['memes'][random.randint(0, 10)]['url'])
+  return(json_data['url'][0])
 
 def add_currency(message):
   print(str(message.author.name))
@@ -48,9 +48,9 @@ async def on_message(message):
   add_currency(message)
   await message.channel.send('You have earned +10 currency! -THIS IS A DEBUG MESSAGE, WILL REMOVE LATER')
 
-  if(msg.startswith('.currency') and msg.endswith('meme')):
+  if(msg.startswith('.cur') and msg.endswith('meme')):
     await message.channel.send(get_meme())
-  if(msg.startswith('.currency') and msg.endswith('inventory')):
+  if(msg.startswith('.cur') and msg.endswith('inventory')):
     await message.channel.send(get_currency(message))
 
 keep_alive()
