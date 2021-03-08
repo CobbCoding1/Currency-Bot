@@ -94,6 +94,8 @@ async def on_message(message):
     await message.channel.send(get_currency(message))
   if(msg.startswith('.cur') and msg.endswith('explore')):
     await message.channel.send(explore(message))
+  if(msg.startswith('.cur') and msg.endswith('help')):
+    await message.channel.send('Current Commands: \n.cur meme (Generates a meme) \n.cur inventory (Shows your current inventory and balance) \n.cur explore (Explore for treasure or a monster)')
 
 keep_alive()
 client.run(os.getenv('TOKEN'))
