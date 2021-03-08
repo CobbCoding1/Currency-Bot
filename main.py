@@ -6,13 +6,18 @@ import json
 import random
 import os
 
+#I need to add comments in this file.
+
+# Initialize client object
 client = discord.Client()
 
+# Get a meme from r/cleanmemes
 def get_meme():
-  response = requests.get('https://api.imgflip.com/get_memes')
+  response = requests.get('https://meme-api.herokuapp.com/gimme/cleanmemes')
   json_data = json.loads(response.text)
-  return(json_data['data']['memes'][random.randint(0, 10)]['url'])
+  return(json_data['url'])
 
+# Add currency to a player
 def add_currency(message):
   print(str(message.author.name))
 
@@ -28,14 +33,16 @@ def add_currency(message):
 
   print(db[str(message.author.name)])
 
+# Get the balanace of a player
 def get_currency(message):
-  return("You currently have: " + db[str(message.author.name)])
+  return("You currently have: " + db[str(message.author.name)] + " currency")
   
-
+# When the program starts, log the username
 @client.event
 async def on_ready():
   print(f'We have logged in as {client.user}')
 
+# Event to get messages from users
 @client.event
 async def on_message(message):
   if(message.author == client.user):
@@ -46,10 +53,12 @@ async def on_message(message):
   add_currency(message)
   await message.channel.send('You have earned +10 currency! -THIS IS A DEBUG MESSAGE, WILL REMOVE LATER')
 
-  if(msg.startswith('.currency') and msg.endswith('meme')):
+  if(msg.startswith('.cur') and msg.endswith('meme')):
     await message.channel.send(get_meme())
-  if(msg.startswith('.currency') and msg.endswith('inventory')):
+  if(msg.startswith('.cur') and msg.endswith('inventory')):
     await message.channel.send(get_currency(message))
+  if(msg.startswith('.cur') and msg.endswith('explore')):
+    await message.channel.send()
 
 keep_alive()
 client.run(os.getenv('TOKEN'))
