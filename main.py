@@ -9,8 +9,9 @@ import os
 # Initialize client object
 client = discord.Client()
 
-monsters = ['Bigfoot', 'Chtululu', 'Godzilla']
+monsters = ['Bigfoot', 'Chtululu', 'Godzilla', 	"Dragon", "Ogre", "Hydra", "Snake", "Tiki monster", "Yeti"]
 treasure = ['Gold', 'Diamond', 'Old Boot', 'Nothing', 'Iron']
+weapons = ' Rusty sword \n Ragged tunic \n Old helment \n Cracked shield'
 
 # Get a meme from r/cleanmemes
 def get_meme():
@@ -43,7 +44,7 @@ def explore(message):
   monsterOrTreasure = random.randint(1, 10)
 
   if(monsterOrTreasure >= 8):
-    monsterSelection = random.randint(1, 3)
+    monsterSelection = random.randint(0, len(monsters))
     return(selectMonster(monsterSelection))
   else:
     treasureSelection = random.randint(1, 5)
@@ -51,12 +52,7 @@ def explore(message):
 
 # Select a monster
 def selectMonster(num):
-  if(num == 1):
-    return(monsters[0])
-  elif(num == 2):
-    return(monsters[1])
-  else:
-    return(monsters[2])
+  return('A wild ' + monsters[num] + ' appeared!')
 
 # Select a treasure
 # NEED TO ADD TO PLAYER INVENTORY
@@ -72,6 +68,12 @@ def selectTreasure(num):
   elif(num == 5):
     return('You found ' + treasure[4])
   
+def helpMessage():
+  return('Current Commands: \n.cur meme (Generates a meme) \n.cur inventory (Shows your current inventory and balance) \n.cur explore (Explore for treasure or a monster)')
+
+def fightPlayer(player_name):
+  return('You have chosen to fight ' + player_name)
+
 # When the program starts, log the username
 @client.event
 async def on_ready():
@@ -87,7 +89,8 @@ async def on_message(message):
   
   add_currency(message)
   await message.channel.send('You have earned +10 currency! -THIS IS A DEBUG MESSAGE, WILL REMOVE LATER')
-
+  if(msg.startswith('.cur') and msg.endswith('.cur')):
+    await message.channel.send('You need to add a function to the end of .cur')
   if(msg.startswith('.cur') and msg.endswith('meme')):
     await message.channel.send(get_meme())
   if(msg.startswith('.cur') and msg.endswith('inventory')):
@@ -95,7 +98,14 @@ async def on_message(message):
   if(msg.startswith('.cur') and msg.endswith('explore')):
     await message.channel.send(explore(message))
   if(msg.startswith('.cur') and msg.endswith('help')):
-    await message.channel.send('Current Commands: \n.cur meme (Generates a meme) \n.cur inventory (Shows your current inventory and balance) \n.cur explore (Explore for treasure or a monster)')
+    await message.channel.send(helpMessage())
+  if(msg.startswith('.cur') and msg.endswith('shop')):
+    await message.channel.send(weapons)
+  if(msg.startswith('.cur')):
+    second_word = msg.split('.cur ', 1)[1]
+    if(second_word.startswith('fight')):
+      player_name = msg.split('fight ', 1)[1]
+      await message.channel.send(fightPlayer(player_name))
 
 keep_alive()
 client.run(os.getenv('TOKEN'))
