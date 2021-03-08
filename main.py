@@ -6,10 +6,11 @@ import json
 import random
 import os
 
-#I need to add comments in this file.
-
 # Initialize client object
 client = discord.Client()
+
+monsters = ['Bigfoot', 'Chtululu', 'Godzilla']
+treasure = ['Gold', 'Diamond', 'Old Boot', 'Nothing', 'Iron']
 
 # Get a meme from r/cleanmemes
 def get_meme():
@@ -36,6 +37,40 @@ def add_currency(message):
 # Get the balanace of a player
 def get_currency(message):
   return("You currently have: " + db[str(message.author.name)] + " currency")
+
+# Find treasure and monsters
+def explore(message):
+  monsterOrTreasure = random.randint(1, 10)
+
+  if(monsterOrTreasure >= 8):
+    monsterSelection = random.randint(1, 3)
+    return(selectMonster(monsterSelection))
+  else:
+    treasureSelection = random.randint(1, 5)
+    return(selectTreasure(treasureSelection))
+
+# Select a monster
+def selectMonster(num):
+  if(num == 1):
+    return(monsters[0])
+  elif(num == 2):
+    return(monsters[1])
+  else:
+    return(monsters[2])
+
+# Select a treasure
+# NEED TO ADD TO PLAYER INVENTORY
+def selectTreasure(num):
+  if(num == 1):
+    return('You found ' + treasure[0])
+  elif(num == 2):
+    return('You found a ' + treasure[1])
+  elif(num == 3):
+    return('You found an ' + treasure[2])
+  elif(num == 4):
+    return('You found ' + treasure[3])
+  elif(num == 5):
+    return('You found ' + treasure[4])
   
 # When the program starts, log the username
 @client.event
@@ -58,7 +93,7 @@ async def on_message(message):
   if(msg.startswith('.cur') and msg.endswith('inventory')):
     await message.channel.send(get_currency(message))
   if(msg.startswith('.cur') and msg.endswith('explore')):
-    await message.channel.send()
+    await message.channel.send(explore(message))
 
 keep_alive()
 client.run(os.getenv('TOKEN'))
